@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkPassword, sessionCookieOptions } from "@/lib/auth";
+import { publicUrl } from "@/lib/public-url";
 
 const COOKIE = "ekonomiya_session";
 
@@ -11,11 +12,11 @@ export async function POST(request: Request) {
 
   if (!checkPassword(password)) {
     const q = new URLSearchParams({ error: "1", from: safeFrom });
-    const response = NextResponse.redirect(`/login?${q}`);
+    const response = NextResponse.redirect(publicUrl(request, `/login?${q}`));
     return response;
   }
 
-  const response = NextResponse.redirect(safeFrom);
+  const response = NextResponse.redirect(publicUrl(request, safeFrom));
   response.cookies.set(COOKIE, "ok", sessionCookieOptions());
   return response;
 }

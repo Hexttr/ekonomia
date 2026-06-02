@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { publicUrl } from "@/lib/public-url";
 
 export function middleware(request: NextRequest) {
   const password = process.env.ACCESS_PASSWORD?.trim();
