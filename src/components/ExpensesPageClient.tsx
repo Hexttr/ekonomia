@@ -39,12 +39,13 @@ export function ExpensesPageClient({ expenses, categories, total }: Props) {
                 className="card flex w-full overflow-hidden text-left active:opacity-90"
               >
                 <div className="w-1.5 shrink-0 sm:w-2" style={{ background: x.category.color }} />
-                <div className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2.5">
+                <div className="flex min-w-0 flex-1 items-stretch gap-3 px-2.5 py-2">
                   <CategoryIcon
                     name={x.category.name}
                     color={x.category.color}
                     icon={x.category.icon}
-                    size="md"
+                    size="row"
+                    className="self-center"
                   />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold leading-tight">{x.category.name}</p>
