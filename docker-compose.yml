@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: ekonomiya-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ekonomiya
+      MYSQL_DATABASE: ekonomiya
+      MYSQL_USER: ekonomiya
+      MYSQL_PASSWORD: ekonomiya
+    ports:
+      - "3308:3306"
+    volumes:
+      - ekonomiya_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uekonomiya", "-pekonomiya"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ekonomiya_mysql:

@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.env
+.env*.local
+legacy
+README.md
+DEPLOY-VPS.md
+*.md
