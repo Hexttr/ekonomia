@@ -1,7 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { CATEGORY_ICON_IDS } from "@/lib/category-icons";
 import { prisma } from "@/lib/prisma";
+
+const VALID_ICONS = new Set<string>(CATEGORY_ICON_IDS);
+
+function normalizeIcon(icon?: string | null): string {
+  const id = icon?.trim() ?? "";
+  return id && VALID_ICONS.has(id) ? id : "";
+}
 
 export async function getCategories() {
   return prisma.category.findMany({
@@ -17,7 +25,7 @@ export async function saveCategory(data: {
 }) {
   const name = data.name.trim();
   if (!name) throw new Error("Укажите название категории");
-  const icon = data.icon?.trim() ?? "";
+  const icon = normalizeIcon(data.icon);
 
   if (data.id) {
     await prisma.category.update({

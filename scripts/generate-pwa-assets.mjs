@@ -13,21 +13,14 @@ const publicDir = join(root, "public");
 
 const BRAND = {
   bg: "#0f1114",
-  green: "#10b981",
-  greenDark: "#059669",
+  white: "#ffffff",
   red: "#ef4444",
 };
 
 function roundedIconBg(size, radius = 112) {
   return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="${BRAND.green}"/>
-      <stop offset="100%" stop-color="${BRAND.greenDark}"/>
-    </linearGradient>
-  </defs>
-  <rect width="${size}" height="${size}" rx="${radius}" fill="url(#g)"/>
+  <rect width="${size}" height="${size}" rx="${radius}" fill="${BRAND.white}"/>
 </svg>`);
 }
 
@@ -37,7 +30,7 @@ function splashSvg() {
   <rect width="1170" height="2532" fill="${BRAND.bg}"/>
   <defs>
     <radialGradient id="glow" cx="50%" cy="32%" r="42%">
-      <stop offset="0%" stop-color="${BRAND.green}" stop-opacity="0.28"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
       <stop offset="100%" stop-color="${BRAND.bg}" stop-opacity="0"/>
     </radialGradient>
   </defs>
@@ -56,7 +49,7 @@ async function trimHand(sharp, input) {
     .toBuffer();
 }
 
-async function buildMark(sharp, handTrimmed, size, handScale = 0.72) {
+async function buildMark(sharp, handTrimmed, size, handScale = 0.68) {
   const bg = await sharp(roundedIconBg(size, Math.round(size * 0.22)))
     .resize(size, size)
     .png()
@@ -89,7 +82,7 @@ async function main() {
   await sharp(mark512).resize(180, 180).png().toFile(join(publicDir, "icon.png"));
   await sharp(mark512).resize(32, 32).png().toFile(join(publicDir, "favicon.png"));
 
-  const splashIcon = await buildMark(sharp, handTrimmed, 320, 0.68);
+  const splashIcon = await buildMark(sharp, handTrimmed, 320, 0.64);
   const splashBase = await sharp(splashSvg()).png().toBuffer();
   const splashHandY = Math.round(2532 * 0.36 - 160);
 
@@ -104,7 +97,7 @@ async function main() {
     .png()
     .toFile(join(publicDir, "splash.png"));
 
-  console.log("Brand assets generated from public/brand/figa-source.png");
+  console.log("Brand assets generated (white logo tile)");
 }
 
 main().catch((e) => {
