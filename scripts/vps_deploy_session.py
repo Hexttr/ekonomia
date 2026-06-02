@@ -7,6 +7,7 @@ remote = "/home/user_adm/ekonomiya"
 root = Path(__file__).resolve().parents[1]
 files = [
     "src/lib/auth.ts",
+    "src/lib/auth-cookies.ts",
     "src/lib/session-token.ts",
     "src/lib/attach-session.ts",
     "src/lib/public-url.ts",

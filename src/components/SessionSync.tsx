@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { REMEMBER_COOKIE, REMEMBER_STORAGE_KEY } from "@/lib/auth";
+import { REMEMBER_COOKIE, REMEMBER_STORAGE_KEY } from "@/lib/auth-cookies";
 
 /** Копирует долгоживущую cookie в localStorage (для PWA после входа). */
 export function SessionSync() {

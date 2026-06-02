@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { REMEMBER_STORAGE_KEY } from "@/lib/auth";
+import { REMEMBER_STORAGE_KEY } from "@/lib/auth-cookies";
 
 type Props = { from: string };
 

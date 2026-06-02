@@ -5,7 +5,7 @@ import {
   SESSION_COOKIE,
   rememberCookieOptions,
   sessionCookieOptions,
-} from "@/lib/auth";
+} from "@/lib/auth-cookies";
 import { publicUrl } from "@/lib/public-url";
 import { verifyRememberToken } from "@/lib/session-token";
 

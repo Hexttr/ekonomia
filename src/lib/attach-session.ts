@@ -4,7 +4,7 @@ import {
   rememberCookieOptions,
   SESSION_COOKIE,
   sessionCookieOptions,
-} from "./auth";
+} from "./auth-cookies";
 
 /** Выставить обе cookie сессии на ответ (login / restore). */
 export function attachSessionCookies(response: NextResponse, rememberToken: string) {
