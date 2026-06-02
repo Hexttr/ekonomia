@@ -103,13 +103,38 @@ def upload(client: paramiko.SSHClient, archive: Path) -> None:
     run(client, f"cd {REMOTE_DIR} && tar -xzf release.tar.gz && rm -f release.tar.gz")
 
 
+def _read_remote_env(client: paramiko.SSHClient) -> dict[str, str]:
+    try:
+        sftp = client.open_sftp()
+        with sftp.file(f"{REMOTE_DIR}/.env", "r") as f:
+            text = f.read().decode("utf-8", errors="replace")
+        sftp.close()
+    except OSError:
+        return {}
+    out: dict[str, str] = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        out[key.strip()] = val.strip()
+    return out
+
+
 def write_env(client: paramiko.SSHClient) -> None:
-    env = f"""MYSQL_ROOT_PASSWORD={secrets.token_urlsafe(24)}
+    existing = _read_remote_env(client)
+    mysql_root = existing.get("MYSQL_ROOT_PASSWORD") or secrets.token_urlsafe(24)
+    mysql_pass = existing.get("MYSQL_PASSWORD") or secrets.token_urlsafe(20)
+    if existing.get("MYSQL_ROOT_PASSWORD"):
+        print(".env: keeping existing MySQL passwords")
+    else:
+        print(".env: creating new MySQL passwords")
+    env = f"""MYSQL_ROOT_PASSWORD={mysql_root}
 MYSQL_USER=ekonomiya
-MYSQL_PASSWORD={secrets.token_urlsafe(20)}
-ACCESS_PASSWORD={os.environ.get('ACCESS_PASSWORD', '513277')}
-COOKIE_SECURE=false
-APP_URL=http://178.170.165.78
+MYSQL_PASSWORD={mysql_pass}
+ACCESS_PASSWORD={existing.get('ACCESS_PASSWORD') or os.environ.get('ACCESS_PASSWORD', '513277')}
+COOKIE_SECURE={existing.get('COOKIE_SECURE', 'false')}
+APP_URL={existing.get('APP_URL', 'http://178.170.165.78')}
 APP_PORT={APP_PORT}
 """
     sftp = client.open_sftp()
