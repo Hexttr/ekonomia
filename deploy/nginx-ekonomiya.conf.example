@@ -1,0 +1,29 @@
+# Example: add a subdomain for HTTPS + PWA (do not edit med-ava site)
+# sudo cp deploy/nginx-ekonomiya.conf.example /etc/nginx/sites-available/ekonomiya
+# sudo ln -s /etc/nginx/sites-available/ekonomiya /etc/nginx/sites-enabled/
+# sudo certbot --nginx -d ekonomiya.YOUR_DOMAIN.ru
+# sudo nginx -t && sudo systemctl reload nginx
+
+server {
+    listen 80;
+    server_name ekonomiya.YOUR_DOMAIN.ru;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name ekonomiya.YOUR_DOMAIN.ru;
+
+    ssl_certificate     /etc/letsencrypt/live/ekonomiya.YOUR_DOMAIN.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ekonomiya.YOUR_DOMAIN.ru/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+
+    location / {
+        proxy_pass http://127.0.0.1:3010;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

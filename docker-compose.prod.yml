@@ -7,6 +7,8 @@ services:
       MYSQL_DATABASE: ekonomiya
       MYSQL_USER: ${MYSQL_USER:-ekonomiya}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD}
+    ports:
+      - "127.0.0.1:3307:3306"
     volumes:
       - ekonomiya_mysql:/var/lib/mysql
     healthcheck:
@@ -26,8 +28,7 @@ services:
     environment:
       DATABASE_URL: mysql://${MYSQL_USER:-ekonomiya}:${MYSQL_PASSWORD}@mysql:3306/ekonomiya
       ACCESS_PASSWORD: ${ACCESS_PASSWORD:?set ACCESS_PASSWORD}
-    command: >
-      sh -c "./node_modules/.bin/prisma db push && node server.js"
+    command: ["node", "server.js"]
 
 volumes:
   ekonomiya_mysql:

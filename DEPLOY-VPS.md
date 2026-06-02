@@ -26,6 +26,23 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 Приложение: `http://IP:3000`
 
+## Текущий деплой (178.170.165.78)
+
+- Приложение: **http://178.170.165.78:3010**
+- Порт **3010** — отдельно от med-ava (3000 + nginx)
+- Пароль входа: `513277` (в `.env` на сервере `~/ekonomiya/.env`)
+- Обновление с ПК: `DEPLOY_SSH_PASS=... python scripts/deploy_vps.py deploy`
+
+### PWA и HTTPS
+
+Для установки на главный экран **нужен HTTPS** (или localhost). По IP по HTTP PWA ограничена.
+
+1. Заведите поддомен (например `ekonomiya.ваш-домен.ru`) → A-запись на IP сервера.
+2. Скопируйте `deploy/nginx-ekonomiya.conf.example` в nginx, получите сертификат:
+   ```bash
+   sudo certbot --nginx -d ekonomiya.ваш-домен.ru
+   ```
+
 ## HTTPS (пример Caddy)
 
 ```
