@@ -3,6 +3,8 @@ import { isAuthEnabled } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AppLogo } from "@/components/AppLogo";
 
+export const dynamic = "force-dynamic";
+
 type Props = { searchParams: Promise<{ from?: string; error?: string }> };
 
 export default async function LoginPage({ searchParams }: Props) {
