@@ -3,8 +3,8 @@
 import { useState } from "react";
 import type { CategoryDTO, ExpenseDTO } from "@/lib/types";
 import { ExpenseDialog } from "./ExpenseDialog";
+import { CategoryIcon } from "./CategoryIcon";
 import { formatAmount, formatDate } from "@/lib/dates";
-import { categoryInitials } from "@/lib/format";
 
 type Props = {
   expenses: ExpenseDTO[];
@@ -38,14 +38,14 @@ export function ExpensesPageClient({ expenses, categories, total }: Props) {
                 onClick={() => setDialog(x.id)}
                 className="card flex w-full overflow-hidden text-left active:opacity-90"
               >
-                <div className="w-0.5 shrink-0" style={{ background: x.category.color }} />
-                <div className="flex min-w-0 flex-1 items-center gap-2.5 px-2.5 py-2">
-                  <div
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold text-white"
-                    style={{ background: x.category.color }}
-                  >
-                    {categoryInitials(x.category.name)}
-                  </div>
+                <div className="w-1.5 shrink-0 sm:w-2" style={{ background: x.category.color }} />
+                <div className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2.5">
+                  <CategoryIcon
+                    name={x.category.name}
+                    color={x.category.color}
+                    icon={x.category.icon}
+                    size="md"
+                  />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold leading-tight">{x.category.name}</p>
                     <p className="text-[11px] text-gray-500">{formatDate(new Date(x.date))}</p>

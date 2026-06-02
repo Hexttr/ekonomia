@@ -4,7 +4,12 @@ import { decimalToNumber } from "./format";
 import { toIsoDate } from "./dates";
 
 export function toCategoryDTO(c: Category): CategoryDTO {
-  return { id: c.id, name: c.name, color: c.color };
+  return {
+    id: c.id,
+    name: c.name,
+    color: c.color,
+    icon: c.icon?.trim() || null,
+  };
 }
 
 export function toExpenseDTO(

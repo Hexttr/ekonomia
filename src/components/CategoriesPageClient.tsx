@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CategoryDTO } from "@/lib/types";
 import { CategoryDialog } from "./CategoryDialog";
+import { CategoryIcon } from "./CategoryIcon";
 import { deleteCategory } from "@/lib/actions/categories";
 import { useRouter } from "next/navigation";
 
@@ -28,7 +29,7 @@ export function CategoriesPageClient({ categories }: Props) {
         <ul className="space-y-1.5">
           {categories.map((c) => (
             <li key={c.id} className="card flex items-center gap-2.5 px-3 py-2.5">
-              <span className="h-9 w-9 shrink-0 rounded-lg" style={{ background: c.color }} />
+              <CategoryIcon name={c.name} color={c.color} icon={c.icon} size="sm" />
               <span className="min-w-0 flex-1 truncate text-sm font-semibold">{c.name}</span>
               <button type="button" className="rounded-lg p-2 text-gray-500" onClick={() => setDialog(c.id)}>
                 ✎

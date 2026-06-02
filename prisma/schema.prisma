@@ -11,6 +11,7 @@ model Category {
   id        String    @id @default(uuid())
   name      String    @db.VarChar(64)
   color     String    @db.VarChar(16)
+  icon      String    @default("") @db.VarChar(32)
   expenses  Expense[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

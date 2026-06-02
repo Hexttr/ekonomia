@@ -4,6 +4,7 @@ export type CategoryDTO = {
   id: string;
   name: string;
   color: string;
+  icon: string | null;
 };
 
 export type ExpenseDTO = {

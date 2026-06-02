@@ -13,18 +13,20 @@ export async function saveCategory(data: {
   id?: string;
   name: string;
   color: string;
+  icon?: string | null;
 }) {
   const name = data.name.trim();
   if (!name) throw new Error("Укажите название категории");
+  const icon = data.icon?.trim() ?? "";
 
   if (data.id) {
     await prisma.category.update({
       where: { id: data.id },
-      data: { name, color: data.color },
+      data: { name, color: data.color, icon },
     });
   } else {
     await prisma.category.create({
-      data: { name, color: data.color },
+      data: { name, color: data.color, icon },
     });
   }
   revalidatePath("/");
