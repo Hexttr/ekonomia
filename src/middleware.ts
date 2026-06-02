@@ -13,9 +13,8 @@ export function middleware(request: NextRequest) {
   const session = request.cookies.get("ekonomiya_session");
   if (session?.value === "ok") return NextResponse.next();
 
-  const login = new URL("/login", request.url);
-  login.searchParams.set("from", pathname);
-  return NextResponse.redirect(login);
+  const q = new URLSearchParams({ from: pathname });
+  return NextResponse.redirect(`/login?${q}`);
 }
 
 export const config = {

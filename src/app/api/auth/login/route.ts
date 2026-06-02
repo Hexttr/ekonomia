@@ -10,14 +10,12 @@ export async function POST(request: Request) {
   const safeFrom = from.startsWith("/") ? from : "/";
 
   if (!checkPassword(password)) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("error", "1");
-    url.searchParams.set("from", safeFrom);
-    return NextResponse.redirect(url);
+    const q = new URLSearchParams({ error: "1", from: safeFrom });
+    const response = NextResponse.redirect(`/login?${q}`);
+    return response;
   }
 
-  const target = new URL(safeFrom, request.url);
-  const response = NextResponse.redirect(target);
+  const response = NextResponse.redirect(safeFrom);
   response.cookies.set(COOKIE, "ok", sessionCookieOptions());
   return response;
 }
