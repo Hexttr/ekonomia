@@ -108,6 +108,7 @@ def write_env(client: paramiko.SSHClient) -> None:
 MYSQL_USER=ekonomiya
 MYSQL_PASSWORD={secrets.token_urlsafe(20)}
 ACCESS_PASSWORD={os.environ.get('ACCESS_PASSWORD', '513277')}
+COOKIE_SECURE=false
 APP_PORT={APP_PORT}
 """
     sftp = client.open_sftp()
