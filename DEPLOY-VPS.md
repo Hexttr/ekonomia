@@ -28,7 +28,8 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 ## Текущий деплой (178.170.165.78)
 
-- Приложение: **http://178.170.165.78:3010**
+- Приложение: **http://178.170.165.78/** (через nginx, порт 80)
+- Внутренний порт Docker: `3010` (снаружи часто заблокирован хостингом)
 - Порт **3010** — отдельно от med-ava (3000 + nginx)
 - Пароль входа: `513277` (в `.env` на сервере `~/ekonomiya/.env`)
 - Обновление с ПК: `DEPLOY_SSH_PASS=... python scripts/deploy_vps.py deploy`
