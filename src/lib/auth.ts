@@ -1,22 +1,27 @@
 import { cookies } from "next/headers";
+import { REMEMBER_MAX_AGE_SEC } from "./session-token";
 
-const COOKIE = "ekonomiya_session";
-const MAX_AGE = 60 * 60 * 24 * 365; // 1 год
+export const SESSION_COOKIE = "ekonomiya_session";
+export const REMEMBER_COOKIE = "ekonomiya_remember";
+export const REMEMBER_STORAGE_KEY = "ekonomiya_remember";
+
+/** Срок сессии (секунды), по умолчанию 10 лет */
+export function sessionMaxAgeSec(): number {
+  const raw = process.env.SESSION_MAX_AGE_SEC?.trim();
+  if (raw) {
+    const n = Number(raw);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return REMEMBER_MAX_AGE_SEC;
+}
 
 export function isAuthEnabled(): boolean {
   return Boolean(process.env.ACCESS_PASSWORD?.trim());
 }
 
-/** Secure только при HTTPS (COOKIE_SECURE=true). По HTTP cookie иначе не сохраняется. */
 export function isCookieSecure(): boolean {
   const v = process.env.COOKIE_SECURE?.trim().toLowerCase();
   return v === "true" || v === "1";
-}
-
-export async function isAuthenticated(): Promise<boolean> {
-  if (!isAuthEnabled()) return true;
-  const store = await cookies();
-  return store.get(COOKIE)?.value === "ok";
 }
 
 export function sessionCookieOptions() {
@@ -25,18 +30,38 @@ export function sessionCookieOptions() {
     secure: isCookieSecure(),
     sameSite: "lax" as const,
     path: "/",
-    maxAge: MAX_AGE,
+    maxAge: sessionMaxAgeSec(),
   };
 }
 
-export async function setAuthenticated(): Promise<void> {
+export function rememberCookieOptions() {
+  return {
+    httpOnly: false,
+    secure: isCookieSecure(),
+    sameSite: "lax" as const,
+    path: "/",
+    maxAge: sessionMaxAgeSec(),
+  };
+}
+
+export async function isAuthenticated(): Promise<boolean> {
+  if (!isAuthEnabled()) return true;
   const store = await cookies();
-  store.set(COOKIE, "ok", sessionCookieOptions());
+  return store.get(SESSION_COOKIE)?.value === "ok";
+}
+
+export async function setAuthenticated(rememberToken?: string): Promise<void> {
+  const store = await cookies();
+  store.set(SESSION_COOKIE, "ok", sessionCookieOptions());
+  if (rememberToken) {
+    store.set(REMEMBER_COOKIE, rememberToken, rememberCookieOptions());
+  }
 }
 
 export async function clearAuthenticated(): Promise<void> {
   const store = await cookies();
-  store.delete(COOKIE);
+  store.delete(SESSION_COOKIE);
+  store.delete(REMEMBER_COOKIE);
 }
 
 export function checkPassword(password: string): boolean {

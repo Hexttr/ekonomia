@@ -1,6 +1,7 @@
 import { isAuthEnabled } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AppLogo } from "@/components/AppLogo";
+import { LoginRestore } from "@/components/LoginRestore";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,8 @@ export default async function LoginPage({ searchParams }: Props) {
         <p className="mt-2 text-sm text-gray-500">Введите семейный пароль</p>
         {error && <p className="mt-2 text-sm text-red-400">Неверный пароль</p>}
       </div>
+
+      <LoginRestore from={from ?? "/"} />
 
       <form action="/api/auth/login" method="POST" className="w-full max-w-sm">
         <input type="hidden" name="from" value={from ?? "/"} />

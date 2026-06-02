@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Onest, Unbounded } from "next/font/google";
 import { PwaRegister } from "@/components/PwaRegister";
+import { SessionSync } from "@/components/SessionSync";
 import "./globals.css";
 
 const onest = Onest({
@@ -55,6 +56,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans">
         <PwaRegister />
+        <SessionSync />
         {children}
       </body>
     </html>
